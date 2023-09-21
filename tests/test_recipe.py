@@ -1,12 +1,11 @@
-
 import logging
+
 import reflow as rp
 
 logging.basicConfig(level=logging.DEBUG)
 
 
 def test_recipe_basic():
-
     import reflow as rp
 
     # define recipe
@@ -46,13 +45,13 @@ def test_recipe_basic():
         assert False
     except ValueError:
         assert True
-    
+
     result = recipe(recipe_input, include=[{"step1": "opt"}], on_purge_step="ignore")
     assert result == "start_step2=default"
 
     result = recipe(recipe_input, include=[{"step1": "option1"}])
     assert result == r1
-    
+
     result = recipe(recipe_input, step="step1", include=[{"step1": "option1"}])
     assert result == "start_step1=option1"
 
@@ -70,28 +69,24 @@ def test_recipe_basic():
 
 
 def test_recipe_insert():
-
     from reflow.recipe import Recipe
 
     def default_recipe():
-
         recipe = Recipe()
 
         recipe.insert_step("step1")
         recipe.insert_step("step2")
         recipe.insert_step("step3")
-        
+
         return recipe
-    
+
     pass
 
     recipe = default_recipe()
     assert list(recipe.steps.nodes)[1:] == ["step1", "step2", "step3"]
 
 
-
 def test_recipe_fancy_functions():
-
     # TEST
     recipe = rp.Recipe()
 
@@ -99,17 +94,18 @@ def test_recipe_fancy_functions():
     def step1(input_str):
         # sleep(5)
         return f"{input_str}_step1=default"
-    
+
     @recipe.option()
     def step1___default2(input_str):
         return f"{input_str}_step1=default2"
-    
+
     assert step1("test") == "test_step1=default"
     assert step1("test", option="default") == "test_step1=default"
     assert step1("test", option="default2") == "test_step1=default2"
     assert step1___default2("test") == "test_step1=default2"
     assert step1___default2("test", option="default") == "test_step1=default"
     assert step1___default2("test", option="default2") == "test_step1=default2"
+
 
 # def _test_recipe_combine(recipe_cls):
 
@@ -123,7 +119,7 @@ def test_recipe_fancy_functions():
 
 #     r2.add_branch(lambda x: x + "step2.1", "step2.1", "option1")
 #     r3 = r1 + r2
-    
+
 #     assert len(r3.options) == 2
 
 # def test_recipe_combine():
@@ -133,6 +129,6 @@ def test_recipe_fancy_functions():
 #     _test_recipe_combine(rp.Recipe)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test_recipe_fancy_functions()
     pass

@@ -6,7 +6,7 @@ class Pickler(ABC):
     """Abstract Pickler class which can be used for custom pickling."""
 
     @abstractmethod
-    def dump(self, value:Any, path:str) -> None:
+    def dump(self, value: Any, path: str) -> None:
         """Dump an arbitrary Python object into a file.
 
         Parameters
@@ -19,7 +19,7 @@ class Pickler(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def load(self, path:str) -> Any:
+    def load(self, path: str) -> Any:
         """Load an arbitrary Python object from a file.
 
         Parameters

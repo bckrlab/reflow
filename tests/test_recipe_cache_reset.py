@@ -1,5 +1,4 @@
 def test_cache():
-
     import reflow as rp
 
     # define recipe
@@ -34,6 +33,7 @@ def test_cache():
 
     # redefine `step2=default`
     @recipe.option()
+    # flake8: noqa: F811
     def step2(x):
         return x + "_step2=NEW"
 
@@ -50,9 +50,9 @@ def test_cache():
     # so changes to other steps will show
     # redefine `step1=option2`
     @recipe.option()
-    def step1___option2(x):
+    def step1___option2(x):  # flake8: noqa: F811
         return x + "_step1=NEW"
-    
+
     print(dev.executor.cache.keys())
 
     # execute `step2` and notice that we still get the same result for `step1=option1`
@@ -64,5 +64,5 @@ def test_cache():
     assert result == "start_step1=NEW_step2=NEW"
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test_cache()

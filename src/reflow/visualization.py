@@ -1,21 +1,20 @@
-import dis
-import stat
 from typing import Any, Callable, Tuple
-import pandas as pd
-from .utils.execution import ensure_tuple
-from .recipe import Key
 
+import pandas as pd
+
+from .recipe import Key
+from .utils.execution import ensure_tuple
 
 StatsMapper = Callable[..., dict[Tuple, Any]]
 
+
 def results_to_dataframe(
-        results:list[tuple[Key, Any]],
-        result_to_stats:dict[str, StatsMapper]|StatsMapper|None=None, 
-        filter_columns:bool=True):
-    
+    results: list[tuple[Key, Any]],
+    result_to_stats: dict[str, StatsMapper] | StatsMapper | None = None,
+    filter_columns: bool = True,
+):
     stats_rows = []
     for options, result in results:
-
         stats_dict = {}
         for step, v in result.items():
             if result_to_stats is None:
@@ -44,12 +43,15 @@ def results_to_dataframe(
 
     options_dicts = [options for options, _ in results]
     df_options = pd.DataFrame(options_dicts)
-    df_options.columns = pd.MultiIndex.from_tuples([
-        ('options', step, *([""] * (stats_df.columns.nlevels - 2))) 
-        for step in df_options.columns])
-    
+    df_options.columns = pd.MultiIndex.from_tuples(
+        [
+            ("options", step, *([""] * (stats_df.columns.nlevels - 2)))
+            for step in df_options.columns
+        ]
+    )
+
     df = pd.concat([df_options, stats_df], axis=1)
-    
+
     if filter_columns:
         drop_idx = df.columns[df.nunique() <= 1]
         df.drop(columns=drop_idx, inplace=True)
@@ -57,20 +59,19 @@ def results_to_dataframe(
     return df
 
 
-
 # def draw(
 #         recipe: Recipe,
-#         include: PathPatterns = None, 
+#         include: PathPatterns = None,
 #         exclude: PathPatterns = None,
 #         last_step:str=None,
-#         tree:bool=False, 
-#         label_format=None, 
+#         tree:bool=False,
+#         label_format=None,
 #         label_rotation=35,
-#         draw_kwargs=None, 
+#         draw_kwargs=None,
 #         draw_labels_kwargs=None):
-    
+
 #     # TODO: improve
-    
+
 #     dag = recipe.dag(
 #         include=include,
 #         exclude=exclude,
@@ -81,38 +82,38 @@ def results_to_dataframe(
 #         draw_kwargs = {}
 #     if draw_labels_kwargs is None:
 #         draw_labels_kwargs = {}
-    
+
 #     # plot dag
 #     if not tree:
 #         pos = nx.get_node_attributes(dag, 'pos')
 #         nx.draw(
-#             dag, 
+#             dag,
 #             pos,
 #             **draw_kwargs)
-        
+
 #         labels = dag.nodes()
 #         text = nx.draw_networkx_labels(
-#             tree, 
-#             pos, 
+#             tree,
+#             pos,
 #             labels={n:label_format(n) for n in labels},
 #             **{**{"font_size": 8}, **draw_labels_kwargs})
 #         for _, t in text.items():
-#             t.set_rotation(label_rotation) 
+#             t.set_rotation(label_rotation)
 
 #     else:
 #         # shortest paths
 #         tree = nx.dag_to_branching(dag)
-        
+
 #         # visualize tree
 #         pos = nx.nx_agraph.graphviz_layout(tree, prog="dot", )
 #         nx.draw(
-#             tree, pos, 
+#             tree, pos,
 #             **draw_kwargs)
-        
+
 #         labels = nx.get_node_attributes(tree, 'source')
 #         text = nx.draw_networkx_labels(
-#             tree, 
-#             pos, 
+#             tree,
+#             pos,
 #             labels={n:label_format(l) for n,l in labels.items()},
 #             **{**{"font_size": 8}, **draw_labels_kwargs})
 #         for _, t in text.items():

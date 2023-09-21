@@ -1,9 +1,6 @@
-
-
-from abc import ABC, abstractmethod
 import time
+from abc import ABC, abstractmethod
 from typing import Any, Hashable, Iterable, Tuple
-
 
 from ..recipe import Key, Options
 
@@ -12,11 +9,7 @@ class Cache(ABC):
     """Base class for caches."""
 
     @abstractmethod
-    def get(
-            self, 
-            step:str,
-            options:Options, 
-            default:Any=None) -> Any:
+    def get(self, step: str, options: Options, default: Any = None) -> Any:
         """Get an item from the cache.
 
         Parameters
@@ -36,12 +29,7 @@ class Cache(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def set(
-            self, 
-            step:str, 
-            options:Options,
-            item:Any, 
-            cleanup:bool=True) -> None:
+    def set(self, step: str, options: Options, item: Any, cleanup: bool = True) -> None:
         """Set an item in the cache.
 
         Parameters
@@ -55,17 +43,14 @@ class Cache(ABC):
         cleanup : bool, optional
             Whether to internally clean up the cache.
             It may be useful to set this to false if many items are set at once
-            and the cleanup operation is performance heavy (e.g., 
+            and the cleanup operation is performance heavy (e.g.,
             scanning through all files in a large directory or making a database query)
             , by default True
         """
         raise NotImplementedError()
 
     @abstractmethod
-    def contains(
-            self, 
-            step:str, 
-            options:Options) -> bool:
+    def contains(self, step: str, options: Options) -> bool:
         """Check if the cache contains an item.
 
         Parameters
@@ -83,10 +68,7 @@ class Cache(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def delete(
-            self, 
-            step:str, 
-            options:Options) -> None:
+    def delete(self, step: str, options: Options) -> None:
         """Delete an item from the cache.
 
         Parameters
@@ -97,9 +79,9 @@ class Cache(ABC):
             The options.
         """
         raise NotImplementedError()
-    
+
     @abstractmethod
-    def delete_all(self, step:str, option:Hashable=None) -> None:
+    def delete_all(self, step: str, option: Hashable = None) -> None:
         """Delete a step with a particular option from the cache
         independent of other options settings.
 
@@ -112,7 +94,7 @@ class Cache(ABC):
             If None, all options for the step are deleted, by default None
         """
         raise not NotImplementedError()
-    
+
     def keys(self) -> Iterable[Key]:
         """Get all keys in the cache.
 
@@ -122,7 +104,7 @@ class Cache(ABC):
             The keys (paths).
         """
         return [path for path, _ in self.items()]
-    
+
     def values(self) -> Iterable[Any]:
         """Get all values in the cache.
 
@@ -146,14 +128,10 @@ class Cache(ABC):
 
     @abstractmethod
     def clear(self) -> None:
-        """Clear the cache.
-        """
+        """Clear the cache."""
         raise NotImplementedError()
 
-    def is_locked(
-            self, 
-            step:str, 
-            options:Options) -> bool:
+    def is_locked(self, step: str, options: Options) -> bool:
         """Check if an item is locked.
 
         Parameters
@@ -171,10 +149,7 @@ class Cache(ABC):
         item = self.get(step, options, default=None)
         return isinstance(item, Lock)
 
-    def lock(
-            self, 
-            step:str, 
-            options:Options) -> None:
+    def lock(self, step: str, options: Options) -> None:
         """Lock an item.
 
         Parameters
@@ -195,8 +170,9 @@ class Cache(ABC):
                 self.delete(k)
 
 
-class Lock():
+class Lock:
     """A lock for a cache entry."""
-    def __init__(self, timestamp:int, source:str|None=None) -> None:
+
+    def __init__(self, timestamp: int, source: str | None = None) -> None:
         self.timestamp = timestamp
         self.source = source

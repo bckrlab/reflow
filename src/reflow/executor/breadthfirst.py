@@ -12,25 +12,25 @@
 
 
 # logger = logging.getLogger(__name__)
-    
+
 
 # class BreadthFirstExecutor(CachedExecutor):
 #     """Executes a recipe in a breadth-first manner.
-#     This makes sure that before moving to the next step, all branches of the previous 
-#     step have been executed. This makes sure that they are available 
+#     This makes sure that before moving to the next step, all branches of the previous
+#     step have been executed. This makes sure that they are available
 #     in the cache (if enabled) and are not executed again.
 #     This is, for example, useful for time consuming preprocessing steps.
 
 #     Notes
 #     -----
-#     In distributed settings, this executor does not support communication. 
+#     In distributed settings, this executor does not support communication.
 #     Thus, it may still execute the same step multiple times across nodes.
 
 #     **Important**: This executor is still experimental.
 #     """
 
 #     def __init__(
-#             self, 
+#             self,
 #             cache: Cache = None,
 #             n_jobs:int|None=None,
 #             n_jobs_shuffle:bool=True) -> None:
@@ -41,10 +41,12 @@
 #         cache : Cache, optional
 #             The cache to use for storing results, by default None
 #         n_jobs : int | None, optional
-#             The number of jobs to use for parallelization based on `joblib`, by default None
+#             The number of jobs to use for parallelization based on `joblib`,
+#             by default None
 #         n_jobs_shuffle : bool, optional
 #             Whether to shuffle the execution order of jobs.
-#             This helps to ensure that the execution paths are mixed well so that caching
+#             This helps to ensure that the execution paths are mixed
+#              well so that caching
 #              is more likely to benefit future run. By default True
 #         """
 
@@ -72,7 +74,7 @@
 #         input : tuple
 #             The input to the first step
 #         last_step : str, optional
-#             The last step to execute. 
+#             The last step to execute.
 #             If None, all steps are executed.
 #             By default None
 #         parallelized_steps : list[str] | str | None, optional
@@ -105,7 +107,7 @@
 #         assert all([s in step_names for s in parallelized_steps])
 
 #         execution_lists, result_paths = self._derive_execution_lists(
-#             recipe, 
+#             recipe,
 #             last_step=last_step,
 #             execute_include=execute_include,
 #             execute_exclude=execute_exclude)
@@ -117,28 +119,29 @@
 #             def execute_branch(path:list[(str, str)], input):
 
 #                 logger.debug(f"Executing: {path}")
-                
+
 #                 # get input (e.g., load from cache)
 #                 if input is None:
 #                     input = self._cache_get(
-#                         path[:-1], 
+#                         path[:-1],
 #                         default=None,
-#                         include=cache_include, 
+#                         include=cache_include,
 #                         exclude=cache_exclude)
-                
+
 #                 # calculate step
 #                 step_name, branch_name = path[-1]
 #                 func = recipe.steps[step_name]["branches"][branch_name]["func"]
 #                 result = func(*ensure_tuple(input))
 
 #                 # cache result
-#                 # TODO: if cache is in-memory, accessing cache here MAY duplicate memory
+#                 # TODO: if cache is in-memory, accessing cache
+# here MAY duplicate memory
 #                 self._cache_set(
 #                     path, result, include=cache_include, exclude=cache_exclude)
 
 #                 return result
-            
-#             # shuffle paths for execution to prevent 
+
+#             # shuffle paths for execution to prevent
 #             # overlapping executions across workers
 #             if self.n_jobs is not None and self.n_jobs_shuffle:
 #                 random.shuffle(execution_list)
@@ -152,16 +155,16 @@
 
 #             # run in parallel
 #             # TODO: we could potentially save everything in a out-of-memory cache
-#             #   and access it from there, instead of keeping it in `layer_results_dict`
-#             #   in order to keep results from clogging up the memory
+#             #  and access it from there, instead of keeping it in `layer_results_dict`
+#             #  in order to keep results from clogging up the memory
 #             layer_results = Parallel(n_jobs=n_jobs)(
 #                 delayed(execute_branch)(
-#                     path, 
+#                     path,
 #                     layer_results_dict.get(
-#                         path[:-1], 
-#                         default=None if i_layer > 0 else input)) 
+#                         path[:-1],
+#                         default=None if i_layer > 0 else input))
 #                 for path in execution_list)
-            
+
 #             # save layer results for next layer
 #             layer_results_dict.clear()
 #             for path, result in zip(execution_list, layer_results):
@@ -170,28 +173,27 @@
 #         # parse results
 #         results = [
 #             (
-#                 p, 
-#                 layer_results_dict.get(p) 
-#                 if p in layer_results_dict 
+#                 p,
+#                 layer_results_dict.get(p)
+#                 if p in layer_results_dict
 #                 else self._cache_get(
-#                     p, 
-#                     default=None, 
-#                     include=cache_include, 
-#                     exclude=cache_exclude)) 
+#                     p,
+#                     default=None,
+#                     include=cache_include,
+#                     exclude=cache_exclude))
 #             for p in result_paths]
-        
+
 #         return results
 
 
 #     def _derive_execution_lists(
-#             self, 
+#             self,
 #             recipe:Recipe,
 #             last_step: str=None,
 #             return_result_paths:bool=True,
 #             execute_include:PathPatterns|None=None,
 #             execute_exclude:PathPatterns|None=None
-#         ) -> list[list[tuple[str, Hashable]]]\
-#             |tuple[list[list[tuple[str, Hashable]]], list[list[tuple[str, Hashable]]]]:
+#         ) :
 #         """Derives the execution lists for a recipe that is used by the executor.
 
 #         Parameters
@@ -209,12 +211,13 @@
 
 #         Returns
 #         -------
-#         list[list[tuple[str, Hashable]]] | tuple[list[list[tuple[str, Hashable]]], list[list[tuple[str, Hashable]]]]
-#             The execution lists for each layer or the execution lists and the result paths
+#         list
+#             The execution lists for each layer or the execution lists
+#             and the result paths
 #         """
-        
+
 #         n_steps = len(recipe.steps)
-        
+
 #         # derive tree
 #         dag = recipe.dag(
 #             last_step=last_step,
@@ -223,7 +226,7 @@
 #         tree = dag_to_cache_tree(dag, self.cache)
 
 #         root_node_id = [
-#             n for n, source in tree.nodes(data="source") 
+#             n for n, source in tree.nodes(data="source")
 #             if source == Recipe.DAG_ROOT][0]
 
 #         # derive execution lists by layer
@@ -239,10 +242,10 @@
 #                 for path, parent_id in current_layer
 #                 for _, child_id in tree.out_edges(parent_id)
 #                 if parent_id != child_id]
-            
+
 #             execution_candidates = [
-#                 path 
-#                 for path, node_id in next_layer 
+#                 path
+#                 for path, node_id in next_layer
 #                 if "cached" not in tree.nodes[node_id]
 #             ]
 #             execution_lists.append(execution_candidates)

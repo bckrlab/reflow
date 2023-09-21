@@ -1,29 +1,28 @@
 from typing import Any, Tuple
+
 from ..recipe import Recipe
 
 
 def execution_path_lazy(recipe: Recipe):
-    
-    sequences = dict({s:[s] for s in recipe.output_steps()})
+    sequences = dict({s: [s] for s in recipe.output_steps()})
     execution_layers = [list(sequences.values())]
     executed_steps = set(sequences.keys())
-    waitlist  = []
+    waitlist = []
 
     dag = recipe.steps.reverse(copy=True)
     dag.remove_node(Recipe._DAG_ROOT)
 
     while len(executed_steps) < len(dag):
-
         candidates = set(
             successor
             for node in execution_layers[-1]
             for successor in dag.successors(node[-1])
-            if successor not in executed_steps)
+            if successor not in executed_steps
+        )
         candidates.update(waitlist)
-        
+
         layer = []
         for step in candidates:
-
             if step in executed_steps:
                 continue
 
@@ -48,37 +47,30 @@ def execution_path_lazy(recipe: Recipe):
 
         execution_layers.append(sorted(layer))
 
-    return \
-        [
-            [
-                list(reversed(node)) 
-                for node in layer
-            ] 
-            for layer in reversed(execution_layers)
-        ]
+    return [
+        [list(reversed(node)) for node in layer] for layer in reversed(execution_layers)
+    ]
 
 
 def execution_path_eager(recipe: Recipe):
-    
-    sequences = dict({s:[s] for s in recipe.input_steps()})
+    sequences = dict({s: [s] for s in recipe.input_steps()})
     execution_layers = [list(sequences.values())]
     executed_steps = set(sequences.keys())
-    waitlist  = []
+    waitlist = []
 
     dag = recipe.steps
 
     while len(executed_steps) < len(dag) - 1:
-
         candidates = set(
             successor
             for node in execution_layers[-1]
             for successor in dag.successors(node[-1])
-            if successor not in executed_steps)
+            if successor not in executed_steps
+        )
         candidates.update(waitlist)
-        
+
         layer = []
         for step in candidates:
-
             if step in executed_steps:
                 continue
 
@@ -106,14 +98,14 @@ def execution_path_eager(recipe: Recipe):
     return execution_layers
 
 
-def ensure_tuple(input:Any) -> Tuple[Any, ...]:
+def ensure_tuple(input: Any) -> Tuple[Any, ...]:
     if type(input) is not tuple:
-        return (input, )
+        return (input,)
     else:
         return input
-    
-def ensure_dict(input:Any, steps:list[str]) -> dict[str, Tuple[Any, ...]]:
 
+
+def ensure_dict(input: Any, steps: list[str]) -> dict[str, Tuple[Any, ...]]:
     if type(input) is dict:
         for k in input.keys():
             input[k] = ensure_tuple(input[k])
@@ -121,4 +113,3 @@ def ensure_dict(input:Any, steps:list[str]) -> dict[str, Tuple[Any, ...]]:
     else:
         input_tuple = ensure_tuple(input)
         return {s: input_tuple for s in steps}
-    

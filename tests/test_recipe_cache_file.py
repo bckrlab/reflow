@@ -2,10 +2,9 @@ import tempfile
 
 
 def test_file_cache():
-
     from reflow.cache.file_cache import FileCache
-    with tempfile.TemporaryDirectory() as tmpdirname:
 
+    with tempfile.TemporaryDirectory() as tmpdirname:
         cache = FileCache(out_path=tmpdirname)
 
         cache.set("test", {"test": "option1"}, "test")
@@ -25,5 +24,5 @@ def test_file_cache():
         assert len(list(cache.items())) == 2
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     test_file_cache()

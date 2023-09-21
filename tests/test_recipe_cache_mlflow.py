@@ -1,19 +1,17 @@
-
 import tempfile
 
 
 def test_cache_mlflow_file_based():
-
-    from reflow.cache.mlflow_cache import MlflowCache
     from mlflow.tracking import MlflowClient
 
-    with tempfile.TemporaryDirectory() as tmpdirname:
+    from reflow.cache.mlflow_cache import MlflowCache
 
+    with tempfile.TemporaryDirectory() as tmpdirname:
         client = MlflowClient(tmpdirname)
         cache = MlflowCache("test", mlflow_client=client)
 
         path = "step1", {"step1": "branch1", "step2": "branch3", "step3": "branch1.1"}
-        
+
         value = "BLUBB"
         cache.set(*path, value)
         assert cache.get(*path) == value
@@ -36,13 +34,14 @@ def test_cache_mlflow_file_based():
         value = "BLUBB2"
         cache.set(*path, value)
         assert cache.contains(*path)
-        cache.delete_all('step1')
+        cache.delete_all("step1")
         assert not cache.contains(*path)
 
         assert len(list(cache.items())) == 0
 
-        path2 = "step2", dict([
-            ("step1", "branch1"), ("step2", "branch3"), ("step3", "branch1.2")])
+        path2 = "step2", dict(
+            [("step1", "branch1"), ("step2", "branch3"), ("step3", "branch1.2")]
+        )
         value = "BLUBB2"
         cache.set(*path, value)
         cache.set(*path2, value)
@@ -50,11 +49,12 @@ def test_cache_mlflow_file_based():
 
         assert len(list(cache.items())) == 2
 
-        cache.delete_all('step1', "branch1")
+        cache.delete_all("step1", "branch1")
         assert not cache.contains(*path)
         assert cache.contains(*path2)
 
         pass
+
 
 # def test_cache_mlflow_client_remote():  # not sure how to test this
 #     from pathlib import Path
@@ -65,7 +65,8 @@ def test_cache_mlflow_file_based():
 #     try:
 #         experiment_id = client.create_experiment("purpleml_recipe_test")
 #     except:
-#         experiment_id = client.get_experiment_by_name("purpleml_recipe_test").experiment_id
+#         experiment_id = client.get_experiment_by_name("purpleml_recipe_test")\
+#           .experiment_id
 
 #     # Fetch experiment metadata information
 #     experiment = client.get_experiment(experiment_id)
@@ -79,7 +80,7 @@ def test_cache_mlflow_file_based():
 #     client.log_artifact(r.info.run_id, "./README.md")
 
 # def test_cache_mlflow_remote():  # not sure how to test this
-    
+
 #     from reflow.cache.mlflow_cache import MlflowCache
 #     print("init")
 #     cache = MlflowCache("purpleml_recipe_test", mlflow_client="http://localhost:5000")
@@ -100,7 +101,7 @@ def test_cache_mlflow_file_based():
 #     print(list(cache.items()))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # test_cache_mlflow()
     test_cache_mlflow_file_based()
     pass

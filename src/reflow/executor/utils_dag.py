@@ -1,51 +1,46 @@
-from copy import deepcopy
 import logging
-from typing import Any, Tuple
 import warnings
-
-from ..utils.patterns import ElementPattern, StepOptionPatternList
-
-from .base import Executor
-from .depthfirst import SimpleDepthFirstExecutor
+from copy import deepcopy
+from typing import Any, Tuple
 
 from ..cache.base import Cache
 from ..cache.dict_cache import DictCache
-
 from ..recipe import Recipe
-
+from ..utils.patterns import ElementPattern, StepOptionPatternList
+from .base import Executor
+from .depthfirst import SimpleDepthFirstExecutor
 
 _logger = logging.getLogger(__name__)
 
 
 def execute_recipe(
-        recipe:Recipe,
-        input:Tuple[Any,...]|dict[str, Tuple[Any,...]],
-        step:list[str]|str="latest", # latest, output
-        # syntactic sugar; can be achieved with include
-        option:ElementPattern|None="latest",  
-        include:StepOptionPatternList|str="latest",  # latest, all, step
-        exclude:StepOptionPatternList|None=None,
-        squeeze:bool=True,
-        executor:Executor=None,
-        # in case no executor is given we initialize one with these parameters
-        n_jobs:int|None=None,
-        n_jobs_shuffle:bool=True,
-        cache:Cache=None,
-        # whether to enable cache for these paths 
-        cache_include:ElementPattern|str|None="last step", # last step, output
-        cache_exclude:ElementPattern|None=None,
-        # reset cache; TODO: maybe we should allow include and exclude patterns for this
-        cache_reset:str|None=None,  # last step, output, all
-        on_purge_step:str='raise',
-        # **kwargs:dict
-        ) -> Any:
-    
-    _logger.debug(f"Executing recipe")
+    recipe: Recipe,
+    input: Tuple[Any, ...] | dict[str, Tuple[Any, ...]],
+    step: list[str] | str = "latest",  # latest, output
+    # syntactic sugar; can be achieved with include
+    option: ElementPattern | None = "latest",
+    include: StepOptionPatternList | str = "latest",  # latest, all, step
+    exclude: StepOptionPatternList | None = None,
+    squeeze: bool = True,
+    executor: Executor = None,
+    # in case no executor is given we initialize one with these parameters
+    n_jobs: int | None = None,
+    n_jobs_shuffle: bool = True,
+    cache: Cache = None,
+    # whether to enable cache for these paths
+    cache_include: ElementPattern | str | None = "last step",  # last step, output
+    cache_exclude: ElementPattern | None = None,
+    # reset cache; TODO: maybe we should allow include and exclude patterns for this
+    cache_reset: str | None = None,  # last step, output, all
+    on_purge_step: str = "raise",
+    # **kwargs:dict
+) -> Any:
+    _logger.debug("Executing recipe")
     _logger.debug(f"Step: {step}, option: {option}")
     _logger.debug(f"Include: {include}")
     _logger.debug(f"Exclude: {exclude}")
 
-    if type(step) == str:
+    if type(step) is str:
         if step == "latest":
             steps_parsed = [recipe.latest_step]
         elif step == "output":
@@ -59,18 +54,15 @@ def execute_recipe(
         options_parsed = {}
     elif option == "latest":
         options_parsed = {
-            s: recipe.steps.nodes[s]["latest_option"] 
-            for s in steps_parsed}
+            s: recipe.steps.nodes[s]["latest_option"] for s in steps_parsed
+        }
     else:
-        options_parsed = {
-            s: option
-            for s in steps_parsed}
-    
+        options_parsed = {s: option for s in steps_parsed}
+
     _logger.debug(f"Parsed steps:   {steps_parsed}")
     _logger.debug(f"Parsed options: {options_parsed}")
 
     if isinstance(include, str):
-
         if exclude is not None:
             raise ValueError("Cannot set exclude when include is set to a string!")
 
@@ -78,16 +70,16 @@ def execute_recipe(
             if option is None:
                 option_parsed = recipe.latest_options()[step]
             return recipe.steps.nodes[step]["options"][option_parsed]["func"](*input)
-        
+
         elif include == "latest":
             include_parsed = [recipe.latest_options()]
-        
+
         elif include == "all":
             include_parsed = [{}]
-        
+
         else:
             raise ValueError(f"Unknown include definition: {include}")
-    
+
     elif include is None:
         include_parsed = [{}]
     else:
@@ -104,11 +96,8 @@ def execute_recipe(
 
     # get executor
     executor = default_executor(
-        executor, 
-        cache, 
-        n_jobs=n_jobs, 
-        n_jobs_shuffle=n_jobs_shuffle,
-        no_cache=True)
+        executor, cache, n_jobs=n_jobs, n_jobs_shuffle=n_jobs_shuffle, no_cache=True
+    )
 
     # default cache include
     if type(cache_include) is str:
@@ -142,8 +131,9 @@ def execute_recipe(
         options_exclude=exclude,
         cache_include=cache_include,
         cache_exclude=cache_exclude,
-        on_purge_step=on_purge_step)
-    
+        on_purge_step=on_purge_step,
+    )
+
     # return
     if squeeze and len(result) <= 1:
         if len(result) == 0:
@@ -156,16 +146,16 @@ def execute_recipe(
             else:
                 return r
     else:
-        return result 
+        return result
 
 
 def default_executor(
-        executor:Executor=None, 
-        cache:Cache=None,
-        n_jobs:int|None=None,
-        n_jobs_shuffle:bool=True,
-        no_cache:bool=False) -> Executor:
-    
+    executor: Executor = None,
+    cache: Cache = None,
+    n_jobs: int | None = None,
+    n_jobs_shuffle: bool = True,
+    no_cache: bool = False,
+) -> Executor:
     if executor is not None:
         if cache is not None:
             raise ValueError("Cannot set both executor and cache!")
@@ -176,9 +166,11 @@ def default_executor(
 
     elif cache is not None:
         return SimpleDepthFirstExecutor(
-            cache=cache, n_jobs=n_jobs, n_jobs_shuffle=n_jobs_shuffle)
+            cache=cache, n_jobs=n_jobs, n_jobs_shuffle=n_jobs_shuffle
+        )
 
     else:
         cache = None if no_cache else DictCache()
         return SimpleDepthFirstExecutor(
-            cache=cache, n_jobs=n_jobs, n_jobs_shuffle=n_jobs_shuffle)
+            cache=cache, n_jobs=n_jobs, n_jobs_shuffle=n_jobs_shuffle
+        )

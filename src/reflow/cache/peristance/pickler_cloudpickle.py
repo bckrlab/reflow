@@ -1,4 +1,5 @@
 from typing import Any
+
 import cloudpickle
 
 from .pickler import Pickler
@@ -7,7 +8,7 @@ from .pickler import Pickler
 class CloudPickler(Pickler):
     """Pickler using `pickle` as default"""
 
-    def dump(self, value:Any, path:str) -> None:
+    def dump(self, value: Any, path: str) -> None:
         with open(path, "wb") as f:
             cloudpickle.dump(value, f)
 

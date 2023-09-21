@@ -16,15 +16,9 @@ finally:
     del version, PackageNotFoundError
 
 
-from .visualization import results_to_dataframe
+from .cache.file_cache import FileCache
 from .callable import CallableRecipe as Recipe
 from .session import Session
-from .cache.file_cache import FileCache
+from .visualization import results_to_dataframe
 
-
-__all__ = [
-    Recipe, 
-    Session,
-    FileCache,
-    results_to_dataframe
-]
+__all__ = [Recipe, Session, FileCache, results_to_dataframe]
