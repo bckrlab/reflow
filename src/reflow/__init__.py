@@ -14,3 +14,17 @@ except PackageNotFoundError:  # pragma: no cover
     __version__ = "unknown"
 finally:
     del version, PackageNotFoundError
+
+
+from .visualization import results_to_dataframe
+from .callable import CallableRecipe as Recipe
+from .session import Session
+from .cache.file_cache import FileCache
+
+
+__all__ = [
+    Recipe, 
+    Session,
+    FileCache,
+    results_to_dataframe
+]
