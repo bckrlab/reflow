@@ -369,3 +369,11 @@ on [PyPI], the following steps can be used to release a new version for
 
 [repository]: https://github.com/<USERNAME>/reflow
 [issue tracker]: https://github.com/<USERNAME>/reflow/issues
+
+
+## Notes
+
+- Build `README.md` (TODO: should be automated eventually):
+  ```ssh
+  jupyter nbconvert README.ipynb --execute --to markdown --output-dir='.' --TemplateExporter.extra_template_basedirs=docs/nbconvert/templates --template markdown2
+  ```
