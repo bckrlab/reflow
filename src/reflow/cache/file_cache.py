@@ -37,10 +37,14 @@ class FileCache(Cache):
         self.out_path = out_path
 
     def set(self, step: str, options: Options, item: Any, cleanup: bool = True) -> None:
+        print("Set:")
+
         file_tmp = self._new_file(step, options, tmp=True)
         with open(file_tmp, "wb") as f:
             pickle.dump(((step, options), item), f)
+            print(f"Create file: {file_tmp}")
         file_done = self._new_file(step, options)
+        print(f"Rename file: {file_done}")
         file_tmp.rename(file_done)
         if cleanup:
             self._clean_up_old_files(step, options)
@@ -119,15 +123,21 @@ class FileCache(Cache):
         basename = self._format_basename(step, options)
         out_path = self._out_path()
 
+        print("Get most recent file:")
+
         files = []
+        print("Files")
         for file in out_path.glob(f"{basename}___ts-*___seed-*.pickle"):
             files.append(file)
             print(file)
+        print("Done")
 
         if len(files) == 0:
             return None
         else:
-            newest_file = next(iter(sorted(files, reverse=True)))
+            sorted_files = sorted(files, reverse=True)
+            print(sorted_files)
+            newest_file = next(iter(sorted_files))
             return newest_file
 
     def _clean_up_old_files(self, step: str, options: Options):
@@ -141,12 +151,17 @@ class FileCache(Cache):
             The options.
         """
 
+        print("Cleanup old files:")
+
         basename = self._format_basename(step, options)
         out_path = self._out_path()
+
         files = []
         for f in out_path.glob(f"{basename}___ts-*___seed-*.pickle"):
             files.append(f)
+
         for f in list(sorted(files, reverse=True))[1:]:
+            print(f"Remove file: {f}")
             f.unlink(missing_ok=True)
 
     def _new_file(self, step: str, options: Options, tmp: bool = False) -> pathlib.Path:
