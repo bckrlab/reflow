@@ -1,4 +1,30 @@
-# ReFlow
+```python
+# monkey patch pandas DataFrame to strip <style> tags for display as `README.md`
+
+import re
+import pandas as pd
+
+def _repr_html_decorator_(_repr_html_orig_):
+
+    def _repr_html_patched_(self):
+
+        """Override parent's method."""
+        original = _repr_html_orig_(self)
+
+        # See https://stackoverflow.com/a/55148480/3324095
+        stripped = re.sub(
+            "<style scoped>.*</style>\n",  # replace the CSS...
+            "",  # ...with an empty string
+            original,
+            flags=re.DOTALL,  # match across multiple \n lines
+        )
+
+        return stripped
+
+    return _repr_html_patched_
+
+pd.DataFrame._repr_html_ = _repr_html_decorator_(pd.DataFrame._repr_html_)
+```
 
 > ⚠️ **In Development**: I am still preparing `ReFlow` for release on `pypi`. You can already play around with it but be aware that things are changing or might not be complete. This includes this README which still needs some work.
 
@@ -44,24 +70,14 @@ all_results = recipe("some input", include="all")
 
 # ... for which it provides a nice visualization
 df = rf.results_to_dataframe(all_results, filter_columns=False)
-display(df)
+df
 ```
+<div style="background-color: lightgrey">
+
+
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead tr th {
-        text-align: left;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr>
@@ -94,6 +110,8 @@ display(df)
 </div>
 
 
+
+</div>
 ## Overview
 
 
@@ -162,8 +180,12 @@ def step2(x):
     return x + "_step2=default"
 
 # examine recipe
-print(recipe)
+recipe
 ```
+<div style="background-color: lightgrey">
+
+
+
 
     Recipe
         INPUT
@@ -185,10 +207,12 @@ print(recipe)
 
 
 
+</div>
 
 ```python
 step1___option1("test", option="option2")
 ```
+<div style="background-color: lightgrey">
 
 
 
@@ -197,6 +221,7 @@ step1___option1("test", option="option2")
 
 
 
+</div>
 
 ```python
 step1_switch = "option1"
@@ -212,6 +237,7 @@ elif step1_switch == "option2":
 x = step2(x)
 x
 ```
+<div style="background-color: lightgrey">
 
 
 
@@ -220,10 +246,12 @@ x
 
 
 
+</div>
 
 ```python
 recipe("yuqi", include={"step1": "option1"})
 ```
+<div style="background-color: lightgrey">
 
 
 
@@ -232,6 +260,7 @@ recipe("yuqi", include={"step1": "option1"})
 
 
 
+</div>
 
 ```python
 # a recipe is a function executing all steps in sequence
@@ -239,11 +268,13 @@ recipe("yuqi", include={"step1": "option1"})
 result_from_latest_steps = recipe("some input")
 display(result_from_latest_steps)
 ```
+<div style="background-color: lightgrey">
 
 
     'some input_step1=option2_step2=default'
 
 
+</div>
 
 ```python
 # the recipe can also execute all possible branch combinations ...
@@ -253,22 +284,10 @@ all_results = recipe("some input", include="all")
 df = rf.results_to_dataframe(all_results, filter_columns=False)
 display(df)
 ```
+<div style="background-color: lightgrey">
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead tr th {
-        text-align: left;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr>
@@ -301,6 +320,7 @@ display(df)
 </div>
 
 
+</div>
 
 ```python
 # note that each step is a function and can be used as expected ...
@@ -311,11 +331,13 @@ print(step_result)
 step_result = step1___option1("some input", option="option2")
 print(step_result)
 ```
+<div style="background-color: lightgrey">
 
     some input_step1=option1
     some input_step1=option2
 
 
+</div>
 ## Features
 
 ### Visualization capabilities
@@ -325,6 +347,7 @@ print(step_result)
 # print recipe
 recipe
 ```
+<div style="background-color: lightgrey">
 
 
 
@@ -349,6 +372,7 @@ recipe
 
 
 
+</div>
 
 ```python
 # execute recipe ...
@@ -362,22 +386,10 @@ display(df)
 # ... we can skip columns for steps with only one option
 rf.results_to_dataframe(results)
 ```
+<div style="background-color: lightgrey">
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead tr th {
-        text-align: left;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr>
@@ -410,23 +422,12 @@ rf.results_to_dataframe(results)
 </div>
 
 
+</div><div style="background-color: lightgrey">
+
 
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead tr th {
-        text-align: left;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr>
@@ -457,6 +458,7 @@ rf.results_to_dataframe(results)
 
 
 
+</div>
 ### Execution path filtering
 
 Recipes can blow up pretty quickly as we add more options and steps.
@@ -486,24 +488,12 @@ results = recipe(recipe_input, include=include, squeeze=False)
 df = rf.results_to_dataframe(results, filter_columns=False)
 df
 ```
+<div style="background-color: lightgrey">
 
 
 
 
 <div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead tr th {
-        text-align: left;
-    }
-</style>
 <table border="1" class="dataframe">
   <thead>
     <tr>
@@ -531,6 +521,7 @@ df
 
 
 
+</div>
 **Note:** There is also an `exclude` filter which exectus *after* the include filter.
 
 ### Interactive mode
@@ -582,11 +573,13 @@ if dev:
     result = dev.execute()
     display(result)
 ```
+<div style="background-color: lightgrey">
 
 
     'some input > step1=option1'
 
 
+</div>
 
 ```python
 @recipe.option()
@@ -604,11 +597,13 @@ if dev:
     result = dev.execute()
     display(result)
 ```
+<div style="background-color: lightgrey">
 
 
     'some input > step1=option2 > step2=default'
 
 
+</div>
 #### Execute a specific steps and branches
 
 You can execute a specific step and branch or a complete path whenever you need to, without having to redefine all the previous steps.
@@ -620,11 +615,13 @@ if dev:
     result = dev.execute(step="step1", option="option1")
     display(result)
 ```
+<div style="background-color: lightgrey">
 
 
     'some input > step1=option1'
 
 
+</div>
 
 ```python
 # execute a specific step and branch history
@@ -632,11 +629,13 @@ if dev:
     result = dev.execute(include={"step1": "option1", "step2": "default"})
     display(result)
 ```
+<div style="background-color: lightgrey">
 
 
     'some input > step1=option1 > step2=default'
 
 
+</div>
 #### Caching
 
 By default, the Session uses an executor that caches the results of all steps in memory (the `Cache` type can be customized and is easily extendible).
@@ -655,11 +654,13 @@ if dev:
     result = dev.execute()
     display(result)
 ```
+<div style="background-color: lightgrey">
 
 
     'some input > step1=option2 > step2=default'
 
 
+</div>
 
 ```python
 # redefine `step2=default`
@@ -678,15 +679,19 @@ if dev:
     result = dev.execute(cache_reset="last step")
     display(result)
 ```
+<div style="background-color: lightgrey">
 
 
     'some input > step1=option2 > step2=default'
 
 
+</div><div style="background-color: lightgrey">
+
 
     'some input > step1=option2 > step2=NEW'
 
 
+</div>
 
 ```python
 # note that by default only the last step is cached
@@ -707,15 +712,19 @@ if dev:
     result = dev.execute(step="step2", cache_reset="last step")
     display(result)
 ```
+<div style="background-color: lightgrey">
 
 
     'some input > step1=NEW > step2=NEW'
 
 
+</div><div style="background-color: lightgrey">
+
 
     'some input > step1=NEW > step2=NEW'
 
 
+</div>
 ### Cached and Persistent Execution Results
 
 Execution of paths are cached in memory by default. However, they can also be persisted. This can also help to resuse some of the results from earlier previous steps saving compute resources.
@@ -758,22 +767,26 @@ run = rf.Session(recipe).process(recipe_input)
 # not cached, will take 10 seconds (step1: 5s, step2=option2: 5s)
 run.execute(include={"step2": "option1"});
 ```
+<div style="background-color: lightgrey">
 
-    CPU times: user 787 µs, sys: 2.53 ms, total: 3.31 ms
+    CPU times: user 1.01 ms, sys: 1.74 ms, total: 2.76 ms
     Wall time: 5 s
 
 
+</div>
 
 ```python
 %%time
 # cached, will return immediately since the complete path is cached
 run.execute(include={"step2": "option1"});
 ```
+<div style="background-color: lightgrey">
 
-    CPU times: user 208 µs, sys: 293 µs, total: 501 µs
-    Wall time: 505 µs
+    CPU times: user 478 µs, sys: 0 ns, total: 478 µs
+    Wall time: 485 µs
 
 
+</div>
 
 ```python
 %%time
@@ -781,11 +794,13 @@ run.execute(include={"step2": "option1"});
 # thus executing `step1` will still take 5s
 run.execute(step="step1");
 ```
+<div style="background-color: lightgrey">
 
-    CPU times: user 2.64 ms, sys: 0 ns, total: 2.64 ms
+    CPU times: user 601 µs, sys: 2.43 ms, total: 3.03 ms
     Wall time: 5 s
 
 
+</div>
 
 ```python
 %%time
@@ -795,11 +810,13 @@ run.execute(
     cache_include=["step1"]  # short for [("step1", ".*")]
 );
 ```
+<div style="background-color: lightgrey">
 
-    CPU times: user 1.68 ms, sys: 549 µs, total: 2.23 ms
+    CPU times: user 1.76 ms, sys: 669 µs, total: 2.43 ms
     Wall time: 5 s
 
 
+</div>
 
 ```python
 %%time
@@ -810,11 +827,13 @@ run.execute(
     cache_include=["step1"]  # short for [("step1", ".*")]
 );
 ```
+<div style="background-color: lightgrey">
 
-    CPU times: user 1.1 ms, sys: 1.51 ms, total: 2.61 ms
+    CPU times: user 1.88 ms, sys: 1.02 ms, total: 2.9 ms
     Wall time: 5 s
 
 
+</div>
 #### Persistence
 
 Steps and options can be cached to disk or [MLflow](https://mlflow.org/).
@@ -901,6 +920,7 @@ for i in range(3):
 
 recipe
 ```
+<div style="background-color: lightgrey">
 
 
 
@@ -928,6 +948,7 @@ recipe
 
 
 
+</div>
 ### Easy sharing and combination of recipes
 
 Recipes can be combined easily and defined as classes as well for easier sharing and reuse.
@@ -960,6 +981,7 @@ print("Recipe 1:", recipe1)
 print("Recipe 2:", recipe2)
 print("Recipe 1 + Recipe 2:", recipe)
 ```
+<div style="background-color: lightgrey">
 
     Recipe 1: Recipe
         INPUT
@@ -1020,6 +1042,7 @@ print("Recipe 1 + Recipe 2:", recipe)
 
 
 
+</div>
 ### Extending recipe
 
 
@@ -1040,6 +1063,7 @@ class MyRecipe(rf.Recipe):
 recipe = MyRecipe()
 recipe("test")
 ```
+<div style="background-color: lightgrey">
 
 
 
@@ -1048,6 +1072,7 @@ recipe("test")
 
 
 
+</div>
 
 ```python
 # you can also parameterize your recipes like this
@@ -1075,6 +1100,7 @@ class MyRecipe(rf.Recipe):
 recipe = MyRecipe()
 recipe("test")
 ```
+<div style="background-color: lightgrey">
 
 
 
@@ -1083,6 +1109,7 @@ recipe("test")
 
 
 
+</div>
 ## Potential alternatives
 
 

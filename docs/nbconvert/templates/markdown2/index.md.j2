@@ -5,3 +5,11 @@
 {{ super() }}
 {%- endif -%}
 {% endblock any_cell %}
+
+{% block output %}
+{%- if "remove" not in cell.metadata.get('tags', {}) -%}
+<div style="background-color: lightgrey">
+{{ super() }}
+</div>
+{%- endif -%}
+{% endblock output %}
