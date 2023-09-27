@@ -3,6 +3,7 @@ import pathlib
 import secrets
 import string
 import tempfile
+import threading
 import time
 from typing import Any, Hashable, Iterable, Tuple
 
@@ -90,13 +91,25 @@ class MlflowCache(Cache):
                 "True" if artifact_progress_bar else "False"
             )
 
+        # used for a running id to deduplicate cache entries
+        # in case timestamps are the same (only happened on Windows, with Python 3.10)
+        self.thread_lock = threading.Lock()
+        self.counter = 0
+
     def set(self, step: str, options: Options, item: Any, cleanup: bool = True) -> None:
         timestamp = time.time_ns()
         seed = self._new_seed()
 
+        # used for a running id to deduplicate cache entries
+        # in case timestamps are the same (only happened on Windows, with Python 3.10)
+        with self.thread_lock:
+            counter = self.counter
+            self.counter = self.counter + 1 % 1000
+
         tags = dict()
         tags[self._tag("cache_name")] = self.mlflfow_cache_name
         tags[self._tag("timestamp")] = str(timestamp)
+        tags[self._tag("counter")] = str(counter)
         tags[self._tag("seed")] = seed
 
         # default tags

@@ -25,6 +25,7 @@ class FileCache(Cache):
 
     PREFIX_CACHE = "cache___"
     PREFIX_TMP = "tmp___"
+    COUNTER_MODULO = 1000
 
     def __init__(self, out_path="./_cache") -> None:
         """Initialize the cache.
@@ -37,6 +38,8 @@ class FileCache(Cache):
         super().__init__()
         self.out_path = out_path
 
+        # used for a running id to deduplicate cache entries
+        # in case timestamps are the same (only happened on Windows, with Python 3.10)
         self.thread_lock = threading.Lock()
         self.counter = 0
 
@@ -196,13 +199,15 @@ class FileCache(Cache):
 
         ts = time.time_ns()
 
+        # used for a running id to deduplicate cache entries
+        # in case timestamps are the same (only happened on Windows, with Python 3.10)
         with self.thread_lock:
-            i = self.counter
+            counter = self.counter
             self.counter = self.counter + 1 % 1000
 
         return (
             out_path / f"{'tmp___' if tmp else ''}{basename}"
-            f"___ts-{ts}___i-{i:04d}___seed-{seed}.pickle"
+            f"___ts-{ts}___counter-{counter:04d}___seed-{seed}.pickle"
         )
 
     def _out_path(self) -> pathlib.Path:
