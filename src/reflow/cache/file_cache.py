@@ -4,6 +4,7 @@ import pickle
 import re
 import secrets
 import string
+import threading
 import time
 from typing import Any, Hashable, Iterable, List, Tuple
 
@@ -35,6 +36,9 @@ class FileCache(Cache):
         """
         super().__init__()
         self.out_path = out_path
+
+        self.thread_lock = threading.Lock()
+        self.counter = 0
 
     def set(self, step: str, options: Options, item: Any, cleanup: bool = True) -> None:
         print("Set:")
@@ -192,9 +196,13 @@ class FileCache(Cache):
 
         ts = time.time_ns()
 
+        with self.thread_lock:
+            i = self.counter
+            self.counter = self.counter + 1 % 1000
+
         return (
-            out_path
-            / f"{'tmp___' if tmp else ''}{basename}___ts-{ts}___seed-{seed}.pickle"
+            out_path / f"{'tmp___' if tmp else ''}{basename}"
+            f"___ts-{ts}___i-{i:04d}___seed-{seed}.pickle"
         )
 
     def _out_path(self) -> pathlib.Path:
