@@ -96,7 +96,10 @@ df
 
 
 </div>
+
 ## Overview
+
+A quick overview of the most important features.
 
 **Quickstart:** For a quick overview start with the example in [Quickstart](#quickstart).
 
@@ -742,7 +745,7 @@ run.execute(include={"step2": "option1"});
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 2.55 ms, sys: 411 µs, total: 2.96 ms
+    CPU times: user 1.93 ms, sys: 0 ns, total: 1.93 ms
     Wall time: 5 s
 
 
@@ -755,8 +758,8 @@ run.execute(include={"step2": "option1"});
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 607 µs, sys: 0 ns, total: 607 µs
-    Wall time: 614 µs
+    CPU times: user 189 µs, sys: 256 µs, total: 445 µs
+    Wall time: 449 µs
 
 
 </div>
@@ -769,7 +772,7 @@ run.execute(step="step1");
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 2.32 ms, sys: 1.42 ms, total: 3.74 ms
+    CPU times: user 1.36 ms, sys: 703 µs, total: 2.06 ms
     Wall time: 5 s
 
 
@@ -785,7 +788,7 @@ run.execute(
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 1.08 ms, sys: 2.14 ms, total: 3.21 ms
+    CPU times: user 726 µs, sys: 1.12 ms, total: 1.85 ms
     Wall time: 5 s
 
 
@@ -802,7 +805,7 @@ run.execute(
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 1.53 ms, sys: 1.38 ms, total: 2.91 ms
+    CPU times: user 2.14 ms, sys: 662 µs, total: 2.81 ms
     Wall time: 5 s
 
 
