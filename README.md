@@ -1,30 +1,4 @@
-```python
-# monkey patch pandas DataFrame to strip <style> tags for display as `README.md`
-
-import re
-import pandas as pd
-
-def _repr_html_decorator_(_repr_html_orig_):
-
-    def _repr_html_patched_(self):
-
-        """Override parent's method."""
-        original = _repr_html_orig_(self)
-
-        # See https://stackoverflow.com/a/55148480/3324095
-        stripped = re.sub(
-            "<style scoped>.*</style>\n",  # replace the CSS...
-            "",  # ...with an empty string
-            original,
-            flags=re.DOTALL,  # match across multiple \n lines
-        )
-
-        return stripped
-
-    return _repr_html_patched_
-
-pd.DataFrame._repr_html_ = _repr_html_decorator_(pd.DataFrame._repr_html_)
-```
+# ReFlow
 
 > ⚠️ **In Development**: I am still preparing `ReFlow` for release on `pypi`. You can already play around with it but be aware that things are changing or might not be complete. This includes this README which still needs some work.
 
@@ -769,7 +743,7 @@ run.execute(include={"step2": "option1"});
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 1.01 ms, sys: 1.74 ms, total: 2.76 ms
+    CPU times: user 894 µs, sys: 526 µs, total: 1.42 ms
     Wall time: 5 s
 
 
@@ -782,8 +756,8 @@ run.execute(include={"step2": "option1"});
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 478 µs, sys: 0 ns, total: 478 µs
-    Wall time: 485 µs
+    CPU times: user 618 µs, sys: 0 ns, total: 618 µs
+    Wall time: 627 µs
 
 
 </div>
@@ -796,7 +770,7 @@ run.execute(step="step1");
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 601 µs, sys: 2.43 ms, total: 3.03 ms
+    CPU times: user 1.7 ms, sys: 114 µs, total: 1.81 ms
     Wall time: 5 s
 
 
@@ -812,7 +786,7 @@ run.execute(
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 1.76 ms, sys: 669 µs, total: 2.43 ms
+    CPU times: user 895 µs, sys: 850 µs, total: 1.75 ms
     Wall time: 5 s
 
 
@@ -829,7 +803,7 @@ run.execute(
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 1.88 ms, sys: 1.02 ms, total: 2.9 ms
+    CPU times: user 1.03 ms, sys: 987 µs, total: 2.01 ms
     Wall time: 5 s
 
 
