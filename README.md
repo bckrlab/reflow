@@ -1,6 +1,6 @@
 # ReFlow
 
-> ⚠️ **In Development**: I am still preparing `ReFlow` for release on `pypi`. You can already play around with it but be aware that things are changing or might not be complete.
+> ⚠️ **In Development**: I am still preparing `ReFlow` for release on `pypi`. You can already play around with it but be aware that things are changing or might not be complete. This includes this README which still needs some work.
 
 `ReFlow` (Recipe Flow) is an approach for
 defining and executing a **directed acyclic graph** (DAG)
@@ -672,7 +672,7 @@ run = rf.Session(recipe).process(recipe_input)
 run.execute(include={"step2": "option1"});
 ```
 
-    CPU times: user 2.55 ms, sys: 502 µs, total: 3.05 ms
+    CPU times: user 2.42 ms, sys: 1.33 ms, total: 3.74 ms
     Wall time: 5 s
 
 
@@ -683,8 +683,8 @@ run.execute(include={"step2": "option1"});
 run.execute(include={"step2": "option1"});
 ```
 
-    CPU times: user 456 µs, sys: 0 ns, total: 456 µs
-    Wall time: 463 µs
+    CPU times: user 474 µs, sys: 0 ns, total: 474 µs
+    Wall time: 480 µs
 
 
 
@@ -695,7 +695,7 @@ run.execute(include={"step2": "option1"});
 run.execute(step="step1");
 ```
 
-    CPU times: user 1.78 ms, sys: 931 µs, total: 2.71 ms
+    CPU times: user 1.04 ms, sys: 2.05 ms, total: 3.09 ms
     Wall time: 5 s
 
 
@@ -709,7 +709,7 @@ run.execute(
 );
 ```
 
-    CPU times: user 1.64 ms, sys: 1.22 ms, total: 2.87 ms
+    CPU times: user 1.93 ms, sys: 391 µs, total: 2.32 ms
     Wall time: 5 s
 
 
@@ -724,7 +724,7 @@ run.execute(
 );
 ```
 
-    CPU times: user 1.1 ms, sys: 1.76 ms, total: 2.85 ms
+    CPU times: user 724 µs, sys: 3.54 ms, total: 4.26 ms
     Wall time: 5 s
 
 
