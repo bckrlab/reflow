@@ -11,6 +11,16 @@ where many different preprocessing variants or subsets of the data need to be an
 and it is not clear which analysis steps to use yet.
 
 
+> ⚠️ **Overfitting:** Use `Recipe`s with care in data science settings, as in predictive settings it might promote overfitting when running many different options.
+
+The idea is to define a `Recipe` similar to `scikit-learn`'s pipeline concept,
+but allow for DAGs as well as multiple `option`s for each `step`, i.e., node in the DAG.
+This can result in many different execution instantiations (all combinations of options).
+Developing such recipes rapidly,
+running the recipe efficiently,
+and being able to examine the results effectively
+is the goal of this library.
+
 Install `ReFlow` via pip:
 
 ```bash
@@ -87,17 +97,6 @@ df
 
 </div>
 ## Overview
-
-
-> ⚠️ **Overfitting:** Use `Recipe`s with care in data science settings, as in predictive settings it might promote overfitting when running many different options.
-
-The idea is to define a `Recipe` similar to `scikit-learn`'s pipeline concept,
-but allow for DAGs as well as multiple `option`s for each `step`, i.e., node in the DAG.
-This can result in many different execution instantiations (all combinations of options).
-Developing such recipes rapidly,
-running the recipe efficiently,
-and being able to examine the results effectively
-is the goal of this library.
 
 **Quickstart:** For a quick overview start with the example in [Quickstart](#quickstart).
 
@@ -743,7 +742,7 @@ run.execute(include={"step2": "option1"});
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 894 µs, sys: 526 µs, total: 1.42 ms
+    CPU times: user 2.55 ms, sys: 411 µs, total: 2.96 ms
     Wall time: 5 s
 
 
@@ -756,8 +755,8 @@ run.execute(include={"step2": "option1"});
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 618 µs, sys: 0 ns, total: 618 µs
-    Wall time: 627 µs
+    CPU times: user 607 µs, sys: 0 ns, total: 607 µs
+    Wall time: 614 µs
 
 
 </div>
@@ -770,7 +769,7 @@ run.execute(step="step1");
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 1.7 ms, sys: 114 µs, total: 1.81 ms
+    CPU times: user 2.32 ms, sys: 1.42 ms, total: 3.74 ms
     Wall time: 5 s
 
 
@@ -786,7 +785,7 @@ run.execute(
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 895 µs, sys: 850 µs, total: 1.75 ms
+    CPU times: user 1.08 ms, sys: 2.14 ms, total: 3.21 ms
     Wall time: 5 s
 
 
@@ -803,7 +802,7 @@ run.execute(
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 1.03 ms, sys: 987 µs, total: 2.01 ms
+    CPU times: user 1.53 ms, sys: 1.38 ms, total: 2.91 ms
     Wall time: 5 s
 
 
