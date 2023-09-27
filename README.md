@@ -10,6 +10,93 @@ This can be useful, e.g., in data science settings
 where many different preprocessing variants or subsets of the data need to be analyzed
 and it is not clear which analysis steps to use yet.
 
+
+Install `ReFlow` via pip:
+
+```bash
+pip install git+https://github.com/bckrlab/reflow.git#egg=reflow
+```
+
+Simple example:
+
+
+```python
+import reflow as rf
+
+# define recipe
+
+recipe = rf.Recipe()
+
+@recipe.option()
+def step1___option1(x):
+    return x + "_step1=option1"
+
+@recipe.option()
+def step1___option2(x):
+    return x + "_step1=option2"
+
+@recipe.option()
+def step2(x):
+    return x + "_step2=default"
+
+# the recipe can execute all possible option combinations ...
+all_results = recipe("some input", include="all")
+
+# ... for which it provides a nice visualization
+df = rf.results_to_dataframe(all_results, filter_columns=False)
+display(df)
+```
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead tr th {
+        text-align: left;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr>
+      <th></th>
+      <th colspan="2" halign="left">options</th>
+      <th>results</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th>step1</th>
+      <th>step2</th>
+      <th>step2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>option1</td>
+      <td>default</td>
+      <td>some input_step1=option1_step2=default</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>option2</td>
+      <td>default</td>
+      <td>some input_step1=option2_step2=default</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+## Overview
+
+
 > ⚠️ **Overfitting:** Use `Recipe`s with care in data science settings, as in predictive settings it might promote overfitting when running many different options.
 
 The idea is to define a `Recipe` similar to `scikit-learn`'s pipeline concept,
@@ -672,7 +759,7 @@ run = rf.Session(recipe).process(recipe_input)
 run.execute(include={"step2": "option1"});
 ```
 
-    CPU times: user 2.42 ms, sys: 1.33 ms, total: 3.74 ms
+    CPU times: user 787 µs, sys: 2.53 ms, total: 3.31 ms
     Wall time: 5 s
 
 
@@ -683,8 +770,8 @@ run.execute(include={"step2": "option1"});
 run.execute(include={"step2": "option1"});
 ```
 
-    CPU times: user 474 µs, sys: 0 ns, total: 474 µs
-    Wall time: 480 µs
+    CPU times: user 208 µs, sys: 293 µs, total: 501 µs
+    Wall time: 505 µs
 
 
 
@@ -695,7 +782,7 @@ run.execute(include={"step2": "option1"});
 run.execute(step="step1");
 ```
 
-    CPU times: user 1.04 ms, sys: 2.05 ms, total: 3.09 ms
+    CPU times: user 2.64 ms, sys: 0 ns, total: 2.64 ms
     Wall time: 5 s
 
 
@@ -709,7 +796,7 @@ run.execute(
 );
 ```
 
-    CPU times: user 1.93 ms, sys: 391 µs, total: 2.32 ms
+    CPU times: user 1.68 ms, sys: 549 µs, total: 2.23 ms
     Wall time: 5 s
 
 
@@ -724,7 +811,7 @@ run.execute(
 );
 ```
 
-    CPU times: user 724 µs, sys: 3.54 ms, total: 4.26 ms
+    CPU times: user 1.1 ms, sys: 1.51 ms, total: 2.61 ms
     Wall time: 5 s
 
 
