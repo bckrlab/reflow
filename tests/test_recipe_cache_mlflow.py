@@ -7,7 +7,7 @@ def test_cache_mlflow_file_based():
     from reflow.cache.mlflow_cache import MlflowCache
 
     with tempfile.TemporaryDirectory() as tmpdirname:
-        client = MlflowClient(tmpdirname)
+        client = MlflowClient("file:" + tmpdirname)
         cache = MlflowCache("test", mlflow_client=client)
 
         path = "step1", {"step1": "branch1", "step2": "branch3", "step3": "branch1.1"}

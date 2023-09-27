@@ -118,9 +118,12 @@ class FileCache(Cache):
         """
         basename = self._format_basename(step, options)
         out_path = self._out_path()
+
         files = []
         for file in out_path.glob(f"{basename}___ts-*___seed-*.pickle"):
             files.append(file)
+            print(file)
+
         if len(files) == 0:
             return None
         else:
