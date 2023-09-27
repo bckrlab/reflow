@@ -1,6 +1,6 @@
 # ReFlow
 
-> ⚠️ **In development**: I am still preparing `ReFlow` for publication on `pypi`. You can already play around with it but be aware that things are changing or might not be complete.
+> ⚠️ **In Development**: I am still preparing `ReFlow` for release on `pypi`. You can already play around with it but be aware that things are changing or might not be complete.
 
 `ReFlow` (Recipe Flow) is an approach for
 defining and executing a **directed acyclic graph** (DAG)
@@ -10,7 +10,7 @@ This can be useful, e.g., in data science settings
 where many different preprocessing variants or subsets of the data need to be analyzed
 and it is not clear which analysis steps to use yet.
 
-> ⚠️ Use `Recipe`s with care in data science settings, as in predictive settings it might promote overfitting when running many different options.
+> ⚠️ **Overfitting:** Use `Recipe`s with care in data science settings, as in predictive settings it might promote overfitting when running many different options.
 
 The idea is to define a `Recipe` similar to `scikit-learn`'s pipeline concept,
 but allow for DAGs as well as multiple `option`s for each `step`, i.e., node in the DAG.
@@ -44,6 +44,12 @@ However, see the section about [potential alternatives](#potential-alternatives)
 Maybe one of them renders `ReFlow` obsolete (let me know if you think so in the issue tracker).
 
 ## Quickstart
+
+Install `ReFlow` via pip:
+
+```bash
+pip install git+https://github.com/bckrlab/reflow.git#egg=reflow
+```
 
 A `Recipe` is essentially a fancy function, with separate steps and multiple options for each step.
 The final recipe allows to run and choose from these steps and options using specific keyword arguments.
@@ -666,7 +672,7 @@ run = rf.Session(recipe).process(recipe_input)
 run.execute(include={"step2": "option1"});
 ```
 
-    CPU times: user 653 µs, sys: 2.49 ms, total: 3.14 ms
+    CPU times: user 2.55 ms, sys: 502 µs, total: 3.05 ms
     Wall time: 5 s
 
 
@@ -677,8 +683,8 @@ run.execute(include={"step2": "option1"});
 run.execute(include={"step2": "option1"});
 ```
 
-    CPU times: user 556 µs, sys: 0 ns, total: 556 µs
-    Wall time: 564 µs
+    CPU times: user 456 µs, sys: 0 ns, total: 456 µs
+    Wall time: 463 µs
 
 
 
@@ -689,7 +695,7 @@ run.execute(include={"step2": "option1"});
 run.execute(step="step1");
 ```
 
-    CPU times: user 1.04 ms, sys: 1.99 ms, total: 3.02 ms
+    CPU times: user 1.78 ms, sys: 931 µs, total: 2.71 ms
     Wall time: 5 s
 
 
@@ -703,7 +709,7 @@ run.execute(
 );
 ```
 
-    CPU times: user 1.15 ms, sys: 994 µs, total: 2.14 ms
+    CPU times: user 1.64 ms, sys: 1.22 ms, total: 2.87 ms
     Wall time: 5 s
 
 
@@ -718,7 +724,7 @@ run.execute(
 );
 ```
 
-    CPU times: user 1.97 ms, sys: 1.31 ms, total: 3.29 ms
+    CPU times: user 1.1 ms, sys: 1.76 ms, total: 2.85 ms
     Wall time: 5 s
 
 

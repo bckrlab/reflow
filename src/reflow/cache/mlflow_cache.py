@@ -24,6 +24,7 @@ class MlflowCache(Cache):
     TAG_SYS_PREFIX = "sys."
     PARAM_OPTION_PREFIX = "option."
     MAX_RESULTS = SEARCH_MAX_RESULTS_THRESHOLD
+    COUNTER_MODULO = 1000
 
     def __init__(
         self,
@@ -104,7 +105,7 @@ class MlflowCache(Cache):
         # in case timestamps are the same (only happened on Windows, with Python 3.10)
         with self.thread_lock:
             counter = self.counter
-            self.counter = self.counter + 1 % 1000
+            self.counter = (self.counter + 1) % MlflowCache.COUNTER_MODULO
 
         tags = dict()
         tags[self._tag("cache_name")] = self.mlflfow_cache_name

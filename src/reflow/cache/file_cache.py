@@ -44,15 +44,13 @@ class FileCache(Cache):
         self.counter = 0
 
     def set(self, step: str, options: Options, item: Any, cleanup: bool = True) -> None:
-        print("Set:")
-
         file_tmp = self._new_file(step, options, tmp=True)
         with open(file_tmp, "wb") as f:
             pickle.dump(((step, options), item), f)
-            print(f"Create file: {file_tmp}")
+
         file_done = self._new_file(step, options)
-        print(f"Rename file: {file_done}")
         file_tmp.rename(file_done)
+
         if cleanup:
             self._clean_up_old_files(step, options)
 
@@ -130,20 +128,14 @@ class FileCache(Cache):
         basename = self._format_basename(step, options)
         out_path = self._out_path()
 
-        print("Get most recent file:")
-
         files = []
-        print("Files")
         for file in out_path.glob(f"{basename}___ts-*___seed-*.pickle"):
             files.append(file)
-            print(file)
-        print("Done")
 
         if len(files) == 0:
             return None
         else:
             sorted_files = sorted(files, reverse=True)
-            print(sorted_files)
             newest_file = next(iter(sorted_files))
             return newest_file
 
@@ -158,8 +150,6 @@ class FileCache(Cache):
             The options.
         """
 
-        print("Cleanup old files:")
-
         basename = self._format_basename(step, options)
         out_path = self._out_path()
 
@@ -168,7 +158,6 @@ class FileCache(Cache):
             files.append(f)
 
         for f in list(sorted(files, reverse=True))[1:]:
-            print(f"Remove file: {f}")
             f.unlink(missing_ok=True)
 
     def _new_file(self, step: str, options: Options, tmp: bool = False) -> pathlib.Path:
@@ -203,7 +192,7 @@ class FileCache(Cache):
         # in case timestamps are the same (only happened on Windows, with Python 3.10)
         with self.thread_lock:
             counter = self.counter
-            self.counter = self.counter + 1 % 1000
+            self.counter = (self.counter + 1) % FileCache.COUNTER_MODULO
 
         return (
             out_path / f"{'tmp___' if tmp else ''}{basename}"
