@@ -142,7 +142,6 @@ class SimpleDepthFirstExecutor(CachedExecutor):
 
         # calculate execution path
         execution_path = execution_path_lazy(filtered_recipe)
-        print(execution_path)
         execution_path = [
             step
             for layer in execution_path
@@ -154,7 +153,6 @@ class SimpleDepthFirstExecutor(CachedExecutor):
         _logger.debug(f"Derived execution path: {execution_path}")
 
         # run steps
-        print(execution_path)
         results = dict()
         for step in execution_path:
             option = options[step]
@@ -183,10 +181,6 @@ class SimpleDepthFirstExecutor(CachedExecutor):
                         include=cache_include,
                         exclude=cache_exclude,
                     )
-                    print(input_step, options, cached_input)
-                    for k, v in self.cache.dict.items():
-                        print(k, v)
-                    print(cached_input)
                     step_input.append(cached_input)
                     _logger.debug("Add cached input.")
             # flatten tuples
