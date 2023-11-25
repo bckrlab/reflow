@@ -583,31 +583,28 @@ class Recipe:
 def derive_step_and_option_name(func=None, step=None, option=None, default_step=None):
     function_name = func.__name__
 
-    # figure out naming scheme
-    if step is None and option is None:
-        split = function_name.split("___")
-        if len(split) == 1:
-            step_parsed, option_parsed = split[0], "default"
-        elif len(split) == 2:
-            step_parsed, option_parsed = split
-        else:
-            raise ValueError(f"Unknown function name format: {function_name}")
-
+    split = function_name.split("___")
+    if len(split) == 1:
+        step_parsed, option_parsed = split[0], "default"
+    elif len(split) == 2:
+        step_parsed, option_parsed = split
     else:
-        if step is None:
-            step_parsed = function_name
-        else:
-            step_parsed = step
+        step_parsed, option_parsed = split[0], "___".join(split[1:])
 
-        if option is None:
-            if function_name == "<lambda>":
-                option_parsed = "default"
-            else:
-                option_parsed = function_name
-        else:
-            option_parsed = option
+    if step is not None:
+        step_parsed = step
+    if option is not None:
+        option_parsed = option
+
+    if option is None:
+        if function_name == "<lambda>":
+            option_parsed = "default"
 
     if step_parsed == "<lambda>":
+        if default_step is None:
+            raise ValueError(
+                f"Please provide a step name for the lambda function: {func}"
+            )
         step_parsed = default_step
 
     return step_parsed, option_parsed

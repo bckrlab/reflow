@@ -96,7 +96,6 @@ df
 
 
 </div>
-
 ## Overview
 
 A quick overview of the most important features.
@@ -314,9 +313,14 @@ print(step_result)
 
 
 </div>
+
 ## Features
 
+The following lists a non-complete set of features.
+
 ### Visualization capabilities
+
+Reflow supports visualizing recipes.
 
 
 ```python
@@ -435,6 +439,9 @@ rf.results_to_dataframe(results)
 
 
 </div>
+More visualization tools are planned.
+
+
 ### Execution path filtering
 
 Recipes can blow up pretty quickly as we add more options and steps.
@@ -498,7 +505,9 @@ df
 
 
 </div>
+
 **Note:** There is also an `exclude` filter which exectus *after* the include filter.
+
 
 ### Interactive mode
 
@@ -510,6 +519,7 @@ Interactive mode is for developing recipes. It allows to
 - execute a specific step and branch that the user might want to examine
 
 In the following we will use the same example as in [Quickstart](#quickstart) but check the output at after each step.
+
 
 #### Basic example
 
@@ -580,6 +590,7 @@ if dev:
 
 
 </div>
+
 #### Execute a specific steps and branches
 
 You can execute a specific step and branch or a complete path whenever you need to, without having to redefine all the previous steps.
@@ -612,6 +623,7 @@ if dev:
 
 
 </div>
+
 #### Caching
 
 By default, the Session uses an executor that caches the results of all steps in memory (the `Cache` type can be customized and is easily extendible).
@@ -701,9 +713,11 @@ if dev:
 
 
 </div>
+
 ### Cached and Persistent Execution Results
 
 Execution of paths are cached in memory by default. However, they can also be persisted. This can also help to resuse some of the results from earlier previous steps saving compute resources.
+
 
 #### Steps are cached
 
@@ -745,7 +759,7 @@ run.execute(include={"step2": "option1"});
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 1.93 ms, sys: 0 ns, total: 1.93 ms
+    CPU times: user 1.42 ms, sys: 571 µs, total: 1.99 ms
     Wall time: 5 s
 
 
@@ -758,8 +772,8 @@ run.execute(include={"step2": "option1"});
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 189 µs, sys: 256 µs, total: 445 µs
-    Wall time: 449 µs
+    CPU times: user 513 µs, sys: 0 ns, total: 513 µs
+    Wall time: 520 µs
 
 
 </div>
@@ -772,7 +786,7 @@ run.execute(step="step1");
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 1.36 ms, sys: 703 µs, total: 2.06 ms
+    CPU times: user 1.65 ms, sys: 646 µs, total: 2.29 ms
     Wall time: 5 s
 
 
@@ -788,7 +802,7 @@ run.execute(
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 726 µs, sys: 1.12 ms, total: 1.85 ms
+    CPU times: user 1.26 ms, sys: 744 µs, total: 2 ms
     Wall time: 5 s
 
 
@@ -805,11 +819,12 @@ run.execute(
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 2.14 ms, sys: 662 µs, total: 2.81 ms
+    CPU times: user 1.28 ms, sys: 1.72 ms, total: 3 ms
     Wall time: 5 s
 
 
 </div>
+
 #### Persistence
 
 Steps and options can be cached to disk or [MLflow](https://mlflow.org/).
@@ -838,9 +853,11 @@ with tempfile.TemporaryDirectory() as out:
     rf.Session(recipe).process(recipe_input).using(cache=cache)
 ```
 
+
 ### Parallel and distributed execution
 
 TODO
+
 
 ### Flexible step definitions
 
@@ -925,6 +942,7 @@ recipe
 
 
 </div>
+
 ### Easy sharing and combination of recipes
 
 Recipes can be combined easily and defined as classes as well for easier sharing and reuse.
@@ -1019,6 +1037,7 @@ print("Recipe 1 + Recipe 2:", recipe)
 
 
 </div>
+
 ### Extending recipe
 
 
@@ -1086,6 +1105,7 @@ recipe("test")
 
 
 </div>
+
 ## Potential alternatives
 
 

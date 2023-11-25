@@ -12,7 +12,28 @@ def results_to_dataframe(
     results: list[tuple[Key, Any]],
     result_to_stats: dict[str, StatsMapper] | StatsMapper | None = None,
     filter_columns: bool = True,
+    set_index: bool = True,
+    set_index_drop_output_descriptor: bool = True,
 ):
+    """
+    Converts results to a DataFrame.
+
+    TODO: allow to get multiple results as input for a StatsMapper
+
+    Parameters
+    ----------
+    results : list[tuple[Key, Any]]
+        List of results.
+    result_to_stats : dict[str, StatsMapper] | StatsMapper | None, optional
+        Function to convert results to stats, by default None
+    filter_columns : bool, optional
+        Filter columns with only one unique value, by default True
+    set_index : bool, optional
+        Set index to options, by default True
+    set_index_drop_output_descriptor : bool, optional
+        Drop output descriptor from index (only active when `set_index=True`),
+        by default True
+    """
     stats_rows = []
     for options, result in results:
         stats_dict = {}
@@ -55,6 +76,14 @@ def results_to_dataframe(
     if filter_columns:
         drop_idx = df.columns[df.nunique() <= 1]
         df.drop(columns=drop_idx, inplace=True)
+
+    if set_index:
+        df.set_index(df[["options"]].columns.tolist(), inplace=True)
+        # TODO: I would like a hierarchical multiindex :(
+        df.index.names = [c[1] for c in df.index.names]
+        df.columns = df.columns.droplevel(0)
+        if set_index_drop_output_descriptor:
+            df.columns = df.columns.droplevel(0)
 
     return df
 
