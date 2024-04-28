@@ -6,7 +6,7 @@ def test_recipe_persistence():
     import reflow.persistence as rpp
 
     class MyRecipe(rp.Recipe):
-        def init_steps(self):
+        def _init_steps(self):
             @self.option()
             def test1():
                 return "Blubb 1"

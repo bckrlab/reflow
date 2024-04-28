@@ -46,7 +46,7 @@ class Recipe:
         self.on_exists_option = "raise"
 
         # init steps
-        self.init_steps()
+        self._init_steps()
 
     def set_on_exists(self, on_exists: str):
         if on_exists not in ["raise", "default", "update"]:
@@ -501,7 +501,7 @@ class Recipe:
     def __contains__(self, step: str):
         return self.contains_step(step)
 
-    def init_steps(self):
+    def _init_steps(self):
         """
         For subclasses of recipe to implement in order to pre-define steps.
         This is helpful to share recipes as self-contained classes rather than scripts.

@@ -62,31 +62,41 @@ df
 
 
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
-    <tr>
+    <tr style="text-align: right;">
       <th></th>
-      <th colspan="2" halign="left">options</th>
-      <th>results</th>
+      <th></th>
+      <th>step2</th>
     </tr>
     <tr>
-      <th></th>
       <th>step1</th>
       <th>step2</th>
-      <th>step2</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
-      <td>option1</td>
-      <td>default</td>
+      <th>option1</th>
+      <th>default</th>
       <td>some input_step1=option1_step2=default</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>option2</td>
-      <td>default</td>
+      <th>option2</th>
+      <th>default</th>
       <td>some input_step1=option2_step2=default</td>
     </tr>
   </tbody>
@@ -263,31 +273,41 @@ display(df)
 
 
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
-    <tr>
+    <tr style="text-align: right;">
       <th></th>
-      <th colspan="2" halign="left">options</th>
-      <th>results</th>
+      <th></th>
+      <th>step2</th>
     </tr>
     <tr>
-      <th></th>
       <th>step1</th>
       <th>step2</th>
-      <th>step2</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
-      <td>option1</td>
-      <td>default</td>
+      <th>option1</th>
+      <th>default</th>
       <td>some input_step1=option1_step2=default</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>option2</td>
-      <td>default</td>
+      <th>option2</th>
+      <th>default</th>
       <td>some input_step1=option2_step2=default</td>
     </tr>
   </tbody>
@@ -313,7 +333,6 @@ print(step_result)
 
 
 </div>
-
 ## Features
 
 The following lists a non-complete set of features.
@@ -370,31 +389,41 @@ rf.results_to_dataframe(results)
 
 
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
-    <tr>
+    <tr style="text-align: right;">
       <th></th>
-      <th colspan="2" halign="left">options</th>
-      <th>results</th>
+      <th></th>
+      <th>step2</th>
     </tr>
     <tr>
-      <th></th>
       <th>step1</th>
       <th>step2</th>
-      <th>step2</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
-      <td>option1</td>
-      <td>default</td>
+      <th>option1</th>
+      <th>default</th>
       <td>start_step1=option1_step2=default</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>option2</td>
-      <td>default</td>
+      <th>option2</th>
+      <th>default</th>
       <td>start_step1=option2_step2=default</td>
     </tr>
   </tbody>
@@ -408,28 +437,37 @@ rf.results_to_dataframe(results)
 
 
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
-    <tr>
+    <tr style="text-align: right;">
       <th></th>
-      <th>options</th>
-      <th>results</th>
+      <th>step2</th>
     </tr>
     <tr>
-      <th></th>
       <th>step1</th>
-      <th>step2</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
-      <td>option1</td>
+      <th>option1</th>
       <td>start_step1=option1_step2=default</td>
     </tr>
     <tr>
-      <th>1</th>
-      <td>option2</td>
+      <th>option2</th>
       <td>start_step1=option2_step2=default</td>
     </tr>
   </tbody>
@@ -477,25 +515,36 @@ df
 
 
 <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
 <table border="1" class="dataframe">
   <thead>
-    <tr>
+    <tr style="text-align: right;">
       <th></th>
-      <th colspan="2" halign="left">options</th>
-      <th>results</th>
+      <th></th>
+      <th>step2</th>
     </tr>
     <tr>
-      <th></th>
       <th>step1</th>
       <th>step2</th>
-      <th>step2</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>0</th>
-      <td>option1</td>
-      <td>default</td>
+      <th>option1</th>
+      <th>default</th>
       <td>start_step1=option1_step2=default</td>
     </tr>
   </tbody>
@@ -759,7 +808,7 @@ run.execute(include={"step2": "option1"});
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 1.42 ms, sys: 571 µs, total: 1.99 ms
+    CPU times: user 1.47 ms, sys: 1.43 ms, total: 2.9 ms
     Wall time: 5 s
 
 
@@ -772,8 +821,8 @@ run.execute(include={"step2": "option1"});
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 513 µs, sys: 0 ns, total: 513 µs
-    Wall time: 520 µs
+    CPU times: user 275 µs, sys: 284 µs, total: 559 µs
+    Wall time: 563 µs
 
 
 </div>
@@ -786,7 +835,7 @@ run.execute(step="step1");
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 1.65 ms, sys: 646 µs, total: 2.29 ms
+    CPU times: user 2.18 ms, sys: 743 µs, total: 2.92 ms
     Wall time: 5 s
 
 
@@ -802,7 +851,7 @@ run.execute(
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 1.26 ms, sys: 744 µs, total: 2 ms
+    CPU times: user 1.69 ms, sys: 669 µs, total: 2.36 ms
     Wall time: 5 s
 
 
@@ -811,7 +860,7 @@ run.execute(
 ```python
 %%time
 # then it will be reused in subsequent runs
-# thus here step2=option2 return immediately
+# thus here step2=option2 start executing immediately
 run.execute(
     include={"step2": "option2"},
     cache_include=["step1"]  # short for [("step1", ".*")]
@@ -819,7 +868,7 @@ run.execute(
 ```
 <div style="background-color: lightgrey">
 
-    CPU times: user 1.28 ms, sys: 1.72 ms, total: 3 ms
+    CPU times: user 1.12 ms, sys: 2.05 ms, total: 3.17 ms
     Wall time: 5 s
 
 
@@ -1168,6 +1217,8 @@ recipe("test")
 
 #### General
 
+- [ ] allow for excluding / including previous options for an option (e.g., for a certain preprocessing step / dataset only certain classifiers should be run); careful with this one though it may reduce duplicate code but also mixed / cluttered recipes
+- [ ] maybe allow options to emit new options based on the data/output? ... not sure about this one as the executing graph will be dynamic which may make planning cumbersome
 - [ ] allow to easily save / share recipe execution results
 - [ ] advanced visualization capabilities
 - [ ] interactive visualization (recalculate, empty cache, etc.)

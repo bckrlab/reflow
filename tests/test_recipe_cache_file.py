@@ -24,5 +24,21 @@ def test_file_cache():
         assert len(list(cache.items())) == 2
 
 
+def test_file_cache_recipe_parallel():
+    from reflow import Recipe, Session
+    from reflow.cache.file_cache import FileCache
+
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        cache = FileCache(out_path=tmpdirname)
+
+        r = Recipe()
+
+        @r.option()
+        def test___default(x):
+            return x + " (processed)"
+
+        Session(r).process("blubb").using(cache=cache, n_jobs=2).execute(squeeze=False)
+
+
 if __name__ == "__main__":
-    test_file_cache()
+    test_file_cache_recipe_parallel()

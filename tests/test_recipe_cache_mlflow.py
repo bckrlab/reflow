@@ -101,7 +101,26 @@ def test_cache_mlflow_file_based():
 #     print(list(cache.items()))
 
 
+def test_cache_mlflow_file_based_recipe():
+    from mlflow.tracking import MlflowClient
+
+    from reflow import Recipe, Session
+    from reflow.cache.mlflow_cache import MlflowCache
+
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        client = MlflowClient("file:" + tmpdirname)
+        cache = MlflowCache("test", mlflow_client=client)
+
+        r = Recipe()
+
+        @r.option()
+        def test___default(x):
+            return x + " (processed)"
+
+        Session(r).process("blubb").using(cache=cache, n_jobs=2).execute(squeeze=False)
+
+
 if __name__ == "__main__":
     # test_cache_mlflow()
-    test_cache_mlflow_file_based()
+    test_cache_mlflow_file_based_recipe()
     pass

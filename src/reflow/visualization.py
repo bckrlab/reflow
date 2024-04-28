@@ -30,9 +30,6 @@ def results_to_dataframe(
         Filter columns with only one unique value, by default True
     set_index : bool, optional
         Set index to options, by default True
-    set_index_drop_output_descriptor : bool, optional
-        Drop output descriptor from index (only active when `set_index=True`),
-        by default True
     """
     stats_rows = []
     for options, result in results:
@@ -82,8 +79,6 @@ def results_to_dataframe(
         # TODO: I would like a hierarchical multiindex :(
         df.index.names = [c[1] for c in df.index.names]
         df.columns = df.columns.droplevel(0)
-        if set_index_drop_output_descriptor:
-            df.columns = df.columns.droplevel(0)
 
     return df
 

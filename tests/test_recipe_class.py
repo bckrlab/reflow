@@ -2,7 +2,7 @@ def test_recipe_class():
     import reflow as rp
 
     class MyRecipe(rp.Recipe):
-        def init_steps(self):
+        def _init_steps(self):
             @self.option()
             def test1():
                 return "Blubb 1"

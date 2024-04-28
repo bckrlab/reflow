@@ -3,7 +3,8 @@ import pathlib
 import secrets
 import string
 import tempfile
-import threading
+
+# import threading
 import time
 from typing import Any, Hashable, Iterable, Tuple
 
@@ -24,7 +25,7 @@ class MlflowCache(Cache):
     TAG_SYS_PREFIX = "sys."
     PARAM_OPTION_PREFIX = "option."
     MAX_RESULTS = SEARCH_MAX_RESULTS_THRESHOLD
-    COUNTER_MODULO = 1000
+    # COUNTER_MODULO = 1000
 
     def __init__(
         self,
@@ -92,10 +93,13 @@ class MlflowCache(Cache):
                 "True" if artifact_progress_bar else "False"
             )
 
+        # TODO: the thread lock is not picklable
+        #       which caused issues with parallelization!
+        #       I removed it now, let's see if we get issues with duplicates now
         # used for a running id to deduplicate cache entries
         # in case timestamps are the same (only happened on Windows, with Python 3.10)
-        self.thread_lock = threading.Lock()
-        self.counter = 0
+        # self.thread_lock = threading.Lock()
+        # self.counter = 0
 
     def set(self, step: str, options: Options, item: Any, cleanup: bool = True) -> None:
         timestamp = time.time_ns()
@@ -103,14 +107,14 @@ class MlflowCache(Cache):
 
         # used for a running id to deduplicate cache entries
         # in case timestamps are the same (only happened on Windows, with Python 3.10)
-        with self.thread_lock:
-            counter = self.counter
-            self.counter = (self.counter + 1) % MlflowCache.COUNTER_MODULO
+        # with self.thread_lock:
+        #     counter = self.counter
+        #     self.counter = (self.counter + 1) % MlflowCache.COUNTER_MODULO
 
         tags = dict()
         tags[self._tag("cache_name")] = self.mlflfow_cache_name
         tags[self._tag("timestamp")] = str(timestamp)
-        tags[self._tag("counter")] = str(counter)
+        # tags[self._tag("counter")] = str(counter)
         tags[self._tag("seed")] = seed
 
         # default tags
